@@ -49,11 +49,11 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-router.delete('/:calendarId', async (req, res) => {
-  const calendarId = req.params.calendarId
+router.delete('/:id', async (req, res) => {
+  const calendarId = req.params.id
   try {
     await Calendar.deleteCalendar(calendarId)
-    return res.status(200).send('Success')
+    return res.status(200).send('Successfully removed!')
   } catch (e) {
     console.log(e)
     return res.status(500).json(e)
@@ -75,8 +75,8 @@ router.post('/user/:userEmail', async (req, res) => {
   const authCode = req.query.code
   try {
     const refreshToken = await Google.getRefreshToken(authCode)
-    const result = await Calendar.addCalendarUser(userEmail, refreshToken)
-    return res.status(204).json(result)
+    await Calendar.addCalendarUser(userEmail, refreshToken)
+    return res.status(204).send('Successfully user created!')
   } catch (e) {
     return res.status(500).json(e)
   }

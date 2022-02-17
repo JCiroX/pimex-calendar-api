@@ -24,7 +24,9 @@
     "express": "^4.17.2",
     "express-fileupload": "^1.2.1",
     "firebase": "^9.6.4",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",

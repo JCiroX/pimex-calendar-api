@@ -5,7 +5,7 @@ const Google = require('../utils/google')
 const Utils = require('../utils/utils')
 const Calendar = require('../utils/calendar')
 
-router.delete('/cancel-meeting/:meetId', async (req, res) => {
+/* router.delete('/cancel-meeting/:meetId', async (req, res) => {
   const { meetId } = req.params
   const { ownerEmail } = req.query
   try {
@@ -16,6 +16,17 @@ router.delete('/cancel-meeting/:meetId', async (req, res) => {
     return res.status(500).json(e)
   }
 })
+
+router.put('/reschedule-meet', async (req, res) => {
+  const { meetingData, calendarData } = req.body
+  try {
+    const result = await Google.rescheduleMeet(meetingData, calendarData)
+    return res.status(200).json(result)
+  } catch (e) {
+    console.log(e)
+    return res.status(500).json(e)
+  }
+}) */
 
 router.post('/available-hours', async (req, res) => {
   const { calendarData, selectedDay } = req.body
@@ -76,17 +87,6 @@ router.post('/available-hours', async (req, res) => {
   }
 })
 
-router.put('/reschedule-meet', async (req, res) => {
-  const { meetingData, calendarData } = req.body
-  try {
-    const result = await Google.rescheduleMeet(meetingData, calendarData)
-    return res.status(200).json(result)
-  } catch (e) {
-    console.log(e)
-    return res.status(500).json(e)
-  }
-})
-
 router.post('/thumbnail/:calendarId', async (req, res) => {
   const calendarId = req.params.calendarId
   try {
@@ -94,7 +94,7 @@ router.post('/thumbnail/:calendarId', async (req, res) => {
       return res.status(400).send('No files were uploaded.')
     }
     const uploadedImage = await Google.uploadImage(calendarId, req.files.file)
-    return res.json(uploadedImage)
+    return res.status(200).json(uploadedImage)
   } catch (e) {
     return res.status(500).json(e)
   }
@@ -108,8 +108,8 @@ router.delete('/thumbnail/:calendarId', async (req, res) => {
       return res.status(404).json({ message: 'Calendar not found' })
     }
     const fileExt = calendar.image.name.split('.')[1]
-    const deleted = await Google.deleteImage(`${calendarId}.${fileExt}`)
-    return res.json(deleted)
+    await Google.deleteImage(`${calendarId}.${fileExt}`)
+    return res.status(200).send('Image removed succesfully.')
   } catch (e) {
     console.log(e)
     return res.status(500).json(e)

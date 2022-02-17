@@ -15,6 +15,21 @@ const getRangeHours = (hours, day) => {
   return { timeMin, timeMax }
 }
 
+const normalizePort = val => {
+  const port = parseInt(val, 10)
+
+  if (isNaN(port)) {
+    return val
+  }
+
+  if (port >= 0) {
+    return port
+  }
+
+  return false
+}
+
 module.exports = {
-  getRangeHours
+  getRangeHours,
+  normalizePort
 }

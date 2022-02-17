@@ -11,8 +11,7 @@ router.get('/', async (req, res) => {
     return res.status(400).send('Bad request.')
   }
   try {
-    const a = await Meeting.getMeetingsByField(field, value)
-    return res.status(200).json(a)
+    return res.status(200).json(await Meeting.getMeetingsByField(field, value))
   } catch (e) {
     console.log(e)
     return res.status(500).json(e)
@@ -62,6 +61,10 @@ router.patch('/state/:meetingId', async (req, res) => {
   const { newState } = req.body
   const meetingData = await Meeting.getMeetingById(meetingId)
   const calendarData = await Calendar.getCalendarById(meetingData.calendarId)
+
+  if (meetingData === null) {
+    return res.status(404).send('No meeting found.')
+  }
 
   if (meetingData.state === 'Cancelado' || meetingData.state === 'Confirmado') {
     return res.status(405).send('Action not allowed.')
